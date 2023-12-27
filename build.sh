@@ -3,5 +3,5 @@
 set -xe
 mkdir -p bin
 rm -f bin/*.class
-javac src/*.java
+javac -cp lib/*.jar src/*.java
 mv src/*.class bin/
