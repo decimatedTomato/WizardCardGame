@@ -8,4 +8,21 @@ public class Player {
         id = playerId;
         hand = new ArrayDeque<>();
     }
+
+    public void give(Card card) {
+        hand.add(card);
+    }
+
+    public void drop(Card card) {
+        hand.remove(card);
+    }
+
+    public void dropHand() {
+        hand.clear();
+    }
+
+    @Override
+    public String toString() {
+        return "Player { id: " + id + ", hand: + " + hand + "}";
+    }
 }
