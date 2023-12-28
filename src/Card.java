@@ -1,4 +1,1 @@
-
-public class Card {
-
-}
+public record Card(CardValue value, CardColor color) {}

@@ -1,11 +1,12 @@
+import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PredictState extends State {
     private Card _trumpCard;
-    private Deque<Player> _player;
-    private Map<Integer, Deque<Card>> _hands;
+    private Map<Integer, Integer> _predictions;
 
     public PredictState(WizardGame wizardGame) {
         super(wizardGame);
@@ -19,7 +20,10 @@ public class PredictState extends State {
     }
 
     private void prepareRound() {
+        Deque deck = 
+        // deal cards
 
+        // select trumpcard
     }
 
     @Override
@@ -28,9 +32,11 @@ public class PredictState extends State {
     }
 
     @Override
-    public State transitionNext() {
-        if ()
-        return new 
+    public State transitionNext() throws TransitionCriteriaFailedException {
+        if (!_predictions.keySet().equals(game.getPlayerIDs())) {
+            throw new TransitionCriteriaFailedException();
+        }
+        // return new StrikeState(super.game, _trumpCard, _predictions); 
     }
     
 }

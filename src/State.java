@@ -10,5 +10,5 @@ public abstract class State {
         System.out.println("It is turn " + game.getTurnCounter());
     }
     public abstract void onEnter();
-    public abstract State transitionNext();
+    public abstract State transitionNext() throws TransitionCriteriaFailedException;
 }

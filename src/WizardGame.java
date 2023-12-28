@@ -1,46 +1,45 @@
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashSet;
+import java.util.Set;
 
 public class WizardGame {
-    private int _playerCount;
     private State _state;
-    
+    private int _turnCounter;
     private Deque<Player> _players;
 
+    final Card[] _cards;
+
     public WizardGame(int playerCount) {
-        _playerCount = playerCount;
+        _turnCounter = 0;
+        _state = new PredictState(this);
         _players = new ArrayDeque<>();
         for (int i = 0; i < playerCount; i++) {
             _players.add(new Player(i));
         }
+        ArrayList<Card> cards = new ArrayList<>();
+        for (CardValue val : CardValue.values()) {
+            for (CardColor col : CardColor.values()) {
+                cards.add(new Card(val, col));
+            }
+        }
+        _cards = (Card[])cards.toArray();
     }
 
-    public String getPlayerCount() {
-        return null;
+    public int getPlayerCount() {
+        return _players.size();
     }
 
-    public String getTurnCounter() {
-        return null;
+    public int getTurnCounter() {
+        return _turnCounter;
     }
 
-    // ArrayList<Card> cards = new ArrayList<>();
-    //     for (Value val : Value.values()) {
-    //         for (Color col : Color.values()) {
-    //             cards.add(new Card(val, col));
-    //         }
-    //     }
-    //     _cards = (Card[])cards.toArray();
-
-    //     public void shuffleDeck() {
-    //     
-    // }
-
-    // @Override
-    // public void dealCards() {
-    //     for (int i = 0; i < _turnCounter; i++) {
-    //         for (Player player : _players) {
-    //             player.giveCard(_deck.poll());
-    //         }
-    //     }
-    // }
+    public Set<Integer> getPlayerIDs() {
+        Set<Integer> playerIDs = new HashSet<>();
+        for (Player player : _players) {
+            playerIDs.add(player.id);
+        }
+        return playerIDs;
+    }
 }
