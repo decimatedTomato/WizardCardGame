@@ -6,26 +6,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PredictState extends State {
+public class StatePredict extends State {
     private Card _trumpCard;
     private Map<Player, Integer> _predictions;
 
-    public PredictState(WizardGame wizardGame) {
+    public StatePredict(WizardGame wizardGame) {
         super(wizardGame);
         _predictions = new HashMap<>();
         onEnter();
     }
 
     public void predict(Player player, int prediction) throws InvalidPredictionException {
-        int activePlayerID = game.getActivePlayersID(_predictions.size());
+        Player activePlayer = game.getActivePlayer(_predictions.size());
         if (!game.getPlayers().contains(player)) {
             throw new InvalidPredictionException("Player is not participating in game");
         } else if (prediction < 0) {
             throw new InvalidPredictionException("Prediction cannot be negative");
         } else if (prediction > game.getTurnCounter()) {
             throw new InvalidPredictionException("Prediction cannot be greater than number of strikes this round");
-        } else if (player.id != activePlayerID) {
-            throw new InvalidPredictionException("Active player has ID " + activePlayerID + " not " + player.id);
+        } else if (!player.equals(activePlayer)) {
+            throw new InvalidPredictionException("Active player has id " + activePlayer.id() + " not " + player.id());
         }
         _predictions.put(player, prediction);
     }
@@ -63,6 +63,6 @@ public class PredictState extends State {
         if (_predictions.size() != game.getPlayerCount()) {
             throw new TransitionCriteriaFailedException("Not every player has made predictions");
         }
-        return new StrikeState(super.game, _trumpCard, _predictions); 
+        return new StateStrike(super.game, _trumpCard, _predictions); 
     }
 }

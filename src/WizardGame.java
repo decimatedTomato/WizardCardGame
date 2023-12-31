@@ -5,10 +5,11 @@ import java.util.List;
 
 public class WizardGame {
     private int _turnCounter;
-    private Deque<Player> _players; // order of players in terms of playing cards (starting strikes)
-    private Deque<Player> _dealers; // order of players in terms of dealing (starting rounds)
+    private Deque<Player> _players;                 // order of players in terms of playing cards (starting strikes)
+    private Deque<Player> _dealers;                 // order of players in terms of dealing (starting rounds)
 
     final Card[] CARDS;
+    final int MAX_TURN_COUNTER;
 
     public WizardGame(int playerCount) {
         _turnCounter = 1;
@@ -24,6 +25,7 @@ public class WizardGame {
             }
         }
         CARDS = (Card[])cards.toArray();
+        MAX_TURN_COUNTER = CARDS.length / playerCount;
     }
 
     public Deque<Player> getPlayers() {
@@ -34,13 +36,13 @@ public class WizardGame {
         return _players.size();
     }
 
-    public int getActivePlayersID(int previousPlays) {
-        return ((Player[])_players.toArray())[previousPlays % _players.size()].id;
+    public Player getActivePlayer(int previousPlays) {
+        return ((Player[])_players.toArray())[previousPlays % _players.size()];
     }
 
     public boolean isPlayerHandsEmpty() {
         for (Player player : _players) {
-            if (!player.hand.isEmpty()) {
+            if (!player.hand().isEmpty()) {
                 return false;
             }
         }
@@ -55,8 +57,12 @@ public class WizardGame {
         _turnCounter++;
     }
 
+    public int getMaxTurns() {
+        return MAX_TURN_COUNTER;
+    }
+
     public boolean isValidCardChoice(Player player, Card cardToPlay, Card startingCard) {
-        Deque<Card> hand = player.hand;
+        Deque<Card> hand = player.hand();
         if (cardToPlay.value() == CardValue.JESTER || cardToPlay.value() == CardValue.WIZARD) {
             return true;
         } else if (cardToPlay.color() == startingCard.color()) {
@@ -81,7 +87,7 @@ public class WizardGame {
         if (!_players.contains(player)) {
             throw new RuntimeException("Tried to set starting player to player not participating in game");
         }
-        while (_players.peek().id != (player.id)) {
+        while (_players.peek().equals(player)) {
             _players.addLast(_players.poll());
         }
     }

@@ -1,12 +1,11 @@
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Player {
-    int id;
-    ArrayDeque<Card> hand;
+public record Player(int id, ArrayDeque<Card> hand, List<RoundResult> results) {
 
     public Player(int playerId) {
-        id = playerId;
-        hand = new ArrayDeque<>();
+        this(playerId, new ArrayDeque<>(), new ArrayList<>());
     }
 
     public void give(Card card) {
@@ -19,6 +18,18 @@ public class Player {
 
     public void dropHand() {
         hand.clear();
+    }
+
+    public void addResult(RoundResult result) {
+        results.add(result);
+    }
+
+    public int getFinalScore() {
+        try {
+            return results.get(results.size()-1).accumulatedPoints();
+        } catch (IndexOutOfBoundsException e) {
+            return 0;
+        }
     }
 
     @Override

@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StrikeState extends State {
+public class StateStrike extends State {
 
     private Card _trumpCard;
     private Card _startingCard;
@@ -12,7 +12,7 @@ public class StrikeState extends State {
 
     private List<Play> _plays;
 
-    public StrikeState(WizardGame wizardGame, Card trumpCard, Map<Player, Integer> predictions) {
+    public StateStrike(WizardGame wizardGame, Card trumpCard, Map<Player, Integer> predictions) {
         super(wizardGame);
         _trumpCard = trumpCard;
         _predictions = predictions;
@@ -23,7 +23,7 @@ public class StrikeState extends State {
         onEnter();
     }
     
-    public StrikeState(WizardGame wizardGame, Card trumpCard, Map<Player, Integer> predictions, Map<Player, Integer> results) {
+    public StateStrike(WizardGame wizardGame, Card trumpCard, Map<Player, Integer> predictions, Map<Player, Integer> results) {
         super(wizardGame);
         _trumpCard = trumpCard;
         _predictions = predictions;
@@ -32,18 +32,27 @@ public class StrikeState extends State {
     }
 
     public void playCard(Player player, Card cardToPlay) throws InvalidPlayException {
-        int activePlayerID = game.getActivePlayersID(_predictions.size());
+        Player activePlayer = game.getActivePlayer(_predictions.size());
         if (!game.getPlayers().contains(player)) {
             throw new InvalidPlayException("Player is not participating in game");
         } else if (!game.isValidCardChoice(player, cardToPlay, _startingCard)) {
             throw new InvalidPlayException("Card is not allowed due to your other options");
-        } else if (player.id != activePlayerID) {
-            throw new InvalidPlayException("Active player has ID " + activePlayerID + " not " + player.id);
+        } else if (!player.equals(activePlayer)) {
+            throw new InvalidPlayException("Active player has ID " + activePlayer.id() + " not " + player.id());
         }
         if (_startingCard == null) {
             _startingCard = cardToPlay;
         }
         _plays.add(new Play(player, cardToPlay));
+    }
+
+    private int computeResult(Player player) {
+        final int predictedStrikes = _predictions.get(player);
+        final int predictionError = Math.abs(predictedStrikes - _results.get(player));
+        if (predictionError == 0) {
+            return 20 + 10 * predictedStrikes;
+        }
+        return -10 * predictionError;
     }
 
     @Override
@@ -66,13 +75,17 @@ public class StrikeState extends State {
         }
 
         if (game.isPlayerHandsEmpty()) {
-            return new EvaluateScoresState(game, _predictions, _results);
+            // add scores to players
+            for (Player player : game.getPlayers()) {
+                player.addResult(new RoundResult(_predictions.get(player), computeResult(player)));
+            }
+            return new StateScore(game);
         } else {
             Player winner = game.evaluateWinner(_plays, _trumpCard.color(), _startingCard.color());
             _results.merge(winner, 1, Integer::sum);
             // rotate players so that winning player starts
             game.setStartingPlayer(winner);
-            return new StrikeState(game, _trumpCard, _predictions, _results);
+            return new StateStrike(game, _trumpCard, _predictions, _results);
         }
     }
 
