@@ -1,6 +1,9 @@
 import org.apache.commons.cli.*;
 
 public class Main {
+    final static String USAGE = """
+            WizardGame -p[PLAYERS] [-t/g]
+            """;
     public static void main(String args[]) throws IllegalArgumentException {
         Option players = new Option("p", "players", true, "number of players");
         players.setRequired(true);
@@ -19,7 +22,7 @@ public class Main {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             System.out.println(e.getMessage());
-            formatter.printHelp("utility-name", options);
+            formatter.printHelp(USAGE, options);
             System.exit(1);
         }
 

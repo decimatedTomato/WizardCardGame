@@ -110,5 +110,6 @@ public class TUIGame implements CardGame {
                 System.err.println(e.getMessage());
             }
         }
+        System.out.println("The game has ended");
     }
 }

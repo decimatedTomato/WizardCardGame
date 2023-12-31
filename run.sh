@@ -1,4 +1,4 @@
 #!/bin/bash
 
 set -xe
-java -cp bin/ Main
+java -jar WizardGame.jar -p 2 -t
