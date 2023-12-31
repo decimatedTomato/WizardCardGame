@@ -3,6 +3,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,10 @@ public class StatePredict extends State {
             throw new InvalidPredictionException("Active player has id " + activePlayer.id() + " not " + player.id());
         }
         _predictions.put(player, prediction);
+    }
+
+    public Iterator<Player> getPlayers() {
+        return game.getPlayers().iterator();
     }
 
     @Override

@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +48,10 @@ public class StateStrike extends State {
         _plays.add(new Play(player, cardToPlay));
     }
 
+    public List<Card> getHand(Player player) {
+        return player.hand().stream().toList();
+    }
+
     private int computeResult(Player player) {
         final int predictedStrikes = _predictions.get(player);
         final int predictionError = Math.abs(predictedStrikes - _results.get(player));
@@ -53,6 +59,23 @@ public class StateStrike extends State {
             return 20 + 10 * predictedStrikes;
         }
         return -10 * predictionError;
+    }
+
+    public Iterator<Player> getPlayers() {
+        Collection<Player> playersNotPlayedYet = new ArrayList<>();
+        for (Player player : game.getPlayers()) {
+            boolean hasPlayed = false;
+            for (Play play : _plays) {
+                if (play.player().equals(player)) {
+                    hasPlayed = true;
+                    break;
+                }
+            }
+            if (!hasPlayed) {
+                playersNotPlayedYet.add(player);
+            }
+        }
+        return playersNotPlayedYet.iterator();
     }
 
     @Override

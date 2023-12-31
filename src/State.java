@@ -1,3 +1,4 @@
+import java.util.Iterator;
 
 public abstract class State {
     WizardGame game;
