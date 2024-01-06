@@ -1,3 +1,5 @@
+package main.java.org.tomato.Wizard;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

@@ -1,3 +1,4 @@
+package main.java.org.tomato.Wizard;
 
 public class GUIGame implements CardGame {
     private WizardGame _game;

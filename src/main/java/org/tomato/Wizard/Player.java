@@ -1,3 +1,5 @@
+package main.java.org.tomato.Wizard;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;

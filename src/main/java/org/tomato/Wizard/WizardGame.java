@@ -1,3 +1,5 @@
+package main.java.org.tomato.Wizard;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -24,7 +26,10 @@ public class WizardGame {
                 cards.add(new Card(val, col));
             }
         }
-        CARDS = (Card[])cards.toArray();
+        CARDS = new Card[cards.size()];
+        for (int i = 0; i < cards.size(); i++) {
+            CARDS[i] = cards.get(i);
+        }
         MAX_TURN_COUNTER = CARDS.length / playerCount;
     }
 

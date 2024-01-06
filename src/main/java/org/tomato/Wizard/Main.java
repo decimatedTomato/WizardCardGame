@@ -1,9 +1,12 @@
+package main.java.org.tomato.Wizard;
+
 import org.apache.commons.cli.*;
 
 public class Main {
     final static String USAGE = """
             WizardGame -p[PLAYERS] [-t/g]
             """;
+
     public static void main(String args[]) throws IllegalArgumentException {
         Option players = new Option("p", "players", true, "number of players");
         players.setRequired(true);
@@ -28,7 +31,7 @@ public class Main {
 
         int playerCount = 0;
         try {
-            Integer.parseInt(cmd.getOptionValue("players"));
+            playerCount = Integer.parseInt(cmd.getOptionValue("players"));
         } catch (NumberFormatException e) {
             System.err.println("Invalid player count: " + cmd.getOptionValue("players"));
             System.exit(-1);

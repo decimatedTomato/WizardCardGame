@@ -1,3 +1,5 @@
+package main.java.org.tomato.Wizard;
+
 import java.util.Iterator;
 
 public class StateScore extends State {

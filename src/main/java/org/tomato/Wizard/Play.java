@@ -1,3 +1,5 @@
+package main.java.org.tomato.Wizard;
+
 public record Play(Player player, Card card) {
     static final int WIZARD_VALUE = +999_999_999;
     static final int JESTER_VALUE = -999_999_999;

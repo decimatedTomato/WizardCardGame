@@ -1,3 +1,5 @@
+package main.java.org.tomato.Wizard;
+
 public abstract class State {
     WizardGame game;
 
